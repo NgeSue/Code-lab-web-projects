@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>My Shopping</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+</head>
+
+<body>
+  <div class="card m-auto mt-3 shadow" id="card" style="max-width: 540px;">
+
+  </div>
+  <div id="page"></div>
+</body>
+<script>
+  let page = document.getElementById("page");
+  let list = '';
+  let card = document.getElementById("card");
+
+  card.style.display = "none";
+
+  // fetch nat call
+  fetch('https://fakestoreapi.com/products')
+    .then((response) => response.json() // json format change
+    ).then((result) => { // {} 1 khu tal + ma yay tr 
+      // 1 line p ma 1 line lope chin lop
+      // error tat mhr so lop .then 2 khr yay tr
+
+
+      for (let i = 0; i < result.length; i++) {
+        list += `
+                <div onClick="detail(${result[i].id})" class="d-inline-block justify-content-between col-3 m-3">
+                <div class="card w-100 m-3 shadow-lg">
+                <div class="card-body d-flex justify-content-between card-header">
+                <div>${result[i].id}</div>
+                <div class="fs-3">$${result[i].price}</div>
+                <div class="btn btn-success">Buy</div>
+                </div>
+           
+                <div class="d-flex justify-content-center"> 
+                    <a href="${result[i].image}" target="_blink">
+                    <img src="${result[i].image}" class="w-75  p-3">
+                    </a>
+                    </div>
+               
+                <div class="card-footer text-center">
+                <div>${result[i].title}</div>
+                <div>Rating ${result[i].rating.rate}</div>
+                </div>
+                </div>
+                </div>
+                `;
+      }
+      page.innerHTML = list;
+    });
+
+
+  function detail(id) {
+    console.log(id);
+    card.style.display = "block";
+    fetch("https://fakestoreapi.com/products/" + id)
+      .then((response) => response.json())
+      .then((data) => {
+        card.innerHTML = `
+                <div class="row g-0">
+              <div class="col-md-4">
+                <img src="${data.image}" class="p-3 img-fluid rounded-start" alt="...">
+              </div>
+              <div class="col-md-8 d-inline-block">
+                <div class="card-body">
+                    <p class="card-text">${data.id}</p>
+                  <h5 class="card-title">${data.title}</h5>
+                  <p class="card-text">$${data.price}</p>
+                  <p class="card-text">Rating ${data.rating.rate}</p>
+                  <p class="card-text"><small class="text-muted">${data.description}</small></p>
+                </div>
+              </div>
+            </div>
+                `
+      }
+
+      );
+  }
+
+
+
+
+
+
+
+
+
+
+        // .catch((error)=>{
+        //     console.log(error);
+        // });
+
+
+        // //async await call
+        // let callApi= async() => {  // val fn:
+        //     let response= await fetch("https://fakestoreapi.com/products",{
+        //         method: "GET" ,  // ma yay lal ya
+        //         headers: {
+        //             "Content-Type" : "aplication/json",
+        //         },
+        //     });
+
+        //     //change json
+        //     let jsonResponse= await response.json();
+        //     console.log(jsonResponse);
+        // };
+
+        // callApi();
+
+
+
+</script>
+
+</html>
